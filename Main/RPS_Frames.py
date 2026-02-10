@@ -1,11 +1,11 @@
 import tkinter as tk
 import random as rnd
 import time
+import pygame as pg
 from custom_widgets import (CustomFrame,
                                CustomTitle, CustomSubtitle,
                                CustomLabel, CustomLabelv2,
                                CustomEntry, CustomButton)
-
 from PIL import Image, ImageTk
 # I used this tutorial to get images working in python: https://www.youtube.com/watch?v=UP_kOuCz88A
 
@@ -109,21 +109,46 @@ class RPS_Menu(tk.Frame):
         self.dialoguebox = CustomLabelv2(self.speechlabel, "Go on choom, call it.")
         self.dialoguebox.place(relx=0.5, rely=0.28, anchor="center")
 
-# Winner Status Frame =================================================
-        self.WINNERSTATUSFRAME = CustomFrame(self, 1, columns=0)
-        self.WINNERSTATUSFRAME.grid(row=2, column=1, sticky="nsew", padx=10, pady=10)
+# Winner Status Frame ===============================================
+        self.WINNERSTATUSFRAME = CustomFrame(self, 1, columns=1)
+        self.WINNERSTATUSFRAME.grid(row=2, column=0, sticky="nsew", padx=10, pady=10)
         self.winnerstatus = CustomTitle(self.WINNERSTATUSFRAME, "CURRENT WINNER: N/A")
-        self.winnerstatus.grid(row=0, column=0, sticky="ew", padx=10, pady=10)
-
+        self.winnerstatus.grid(row=2, column=0, sticky="nsew", padx=10, pady=10)
 
 # ==================================================================
 
+# Leaderboard Frame ================================================
+        self.LEADERBOARDFRAME = CustomFrame(self, 4, 1)
+        self.LEADERBOARDFRAME.grid(row=3, column=0, sticky="nsew", padx=10, pady=10)
+
+        self.LeaderboardTitle = CustomTitle(self.LEADERBOARDFRAME, "LEADERBOARD:")
+        self.LeaderboardTitle.grid(row=1, column=1, sticky="nsew", padx=10, pady=10)
+
+        self.playerscore = 0
+        self.playerlabel = CustomTitle(self.LEADERBOARDFRAME, f"PLAYER SCORE:{self.playerscore}")
+        self.playerlabel.grid(row=2, column=1, sticky="nsew", padx=10, pady=10)
+
+        self.robotscore = 0
+        self.robotlabel = CustomTitle(self.LEADERBOARDFRAME, f"PLAYER SCORE:{self.robotscore}")
+        self.robotlabel.grid(row=3, column=1, sticky="nsew", padx=10, pady=10)
+
+        self.gobackbutton = tk.Button(self.LEADERBOARDFRAME,text="GO BACK", command=self.go_to_initial_frame)
+        self.gobackbutton.grid(row=4, column=1, sticky="nsew", padx=10, pady=10)
 
 
+# functions ========================================================
 
-    # ==================================================================
+        pg.mixer.init()
+        pg.mixer.music.load("../sfx/happymusic.mp3")
+        pg.mixer.music.play(-1) #infinite loop
+        pg.mixer.music.set_volume(0.1)
 
-    # visualisation frame ===================================================
+    def go_to_initial_frame(self):
+        print("User clicked go back")
+        from TITLE_Frames import TitleScreen
+        self.destroy()
+        self.parent.current_frame = TitleScreen(self.parent)
+        self.parent.current_frame.pack()
 
     def play_sfx(self, soundfile):
         threading.Thread(target=lambda: playsound(soundfile), daemon=True).start()
@@ -161,39 +186,70 @@ class RPS_Menu(tk.Frame):
         #it ended up freezing the whole GUI until the voicelines were complete
 
     def rollrandomitem(self):
-        ITEMS = ["ROCK", "PAPER", "SCISSOR"]
+        ITEMS = ["ROCK", "PAPER", "SCISSORS"]
         random = rnd.randint(0,2)
         if ITEMS[random] == self.selection:
+            self.robotscore += 1
+            self.playerscore += 1
+            self.robotlabel.config(text=f"PLAYER SCORE: {self.robotscore}")
+            self.playerlabel.config(text=f"PLAYER SCORE: {self.playerscore}")
             self.dialoguebox.config(text="WOW IT'S A TIE")
+            self.winnerstatus.config(text="CURRENT WINNER: TIE")
             self.play_sfx("../robotvoicelines/robot_tie.mp3")
 
 
         #ROBOT WINS
-        if ITEMS[random] == "PAPER" and self.selection == "R0CK":
+        if ITEMS[random] == "PAPER" and self.selection == "ROCK":
+            self.robotscore += 1
+            self.robotlabel.config(text=f"PLAYER SCORE: {self.robotscore}")
             self.dialoguebox.config(text="HAHA I AM THE WINNER")
+            self.winnerstatus.config(text="CURRENT WINNER: ROBOT")
+            self.play_sfx("../sfx/OHNO.mp3")
             self.play_sfx("../robotvoicelines/robot_win.mp3")
 
         if ITEMS[random] == "ROCK" and self.selection == "SCISSORS":
+            self.robotscore += 1
+            self.robotlabel.config(text=f"PLAYER SCORE: {self.robotscore}")
             self.dialoguebox.config(text="HAHA I AM THE WINNER")
+            self.winnerstatus.config(text="CURRENT WINNER: ROBOT")
+            self.play_sfx("../sfx/OHNO.mp3")
             self.play_sfx("../robotvoicelines/robot_win.mp3")
 
-        if ITEMS[random] == "SCISSOR" and self.selection == "PAPER":
+        if ITEMS[random] == "SCISSORS" and self.selection == "PAPER":
+            self.robotscore += 1
+            self.robotlabel.config(text=f"PLAYER SCORE: {self.robotscore}")
             self.dialoguebox.config(text="HAHA I AM THE WINNER")
+            self.winnerstatus.config(text="CURRENT WINNER: ROBOT")
+            self.play_sfx("../sfx/OHNO.mp3")
             self.play_sfx("../robotvoicelines/robot_win.mp3")
 
 
         #ROBOT LOSES
         if ITEMS[random] == "ROCK" and self.selection == "PAPER":
+            self.playerscore += 1
+            self.playerlabel.config(text=f"PLAYER SCORE: {self.playerscore}")
             self.dialoguebox.config(text="OH NO I LOST")
+            self.winnerstatus.config(text="CURRENT WINNER: HUMAN")
+            self.play_sfx("../sfx/YAY.mp3")
             self.play_sfx("../robotvoicelines/robot_lose.mp3")
 
-        if ITEMS[random] == "SCISSOR" and self.selection == "ROCK":
+        if ITEMS[random] == "SCISSORS" and self.selection == "ROCK":
+            self.playerscore += 1
+            self.playerlabel.config(text=f"PLAYER SCORE: {self.playerscore}")
             self.dialoguebox.config(text="OH NO I LOST")
+            self.winnerstatus.config(text="CURRENT WINNER: HUMAN")
+            self.play_sfx("../sfx/YAY.mp3")
             self.play_sfx("../robotvoicelines/robot_lose.mp3")
 
-        if ITEMS[random] == "PAPER" and self.selection == "SCISSOR":
+        if ITEMS[random] == "PAPER" and self.selection == "SCISSORS":
+            self.playerscore += 1
+            self.playerlabel.config(text=f"PLAYER SCORE: {self.playerscore}")
             self.dialoguebox.config(text="OH NO I LOST")
+            self.winnerstatus.config(text="CURRENT WINNER: HUMAN")
+            self.play_sfx("../sfx/YAY.mp3")
             self.play_sfx("../robotvoicelines/robot_lose.mp3")
+
+
 
 
 

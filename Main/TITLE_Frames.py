@@ -1,12 +1,7 @@
 import tkinter as tk
-from RPS_Frames import RPS_Menu
-from custom_widgets import (CustomFrame,
-                               CustomTitle, CustomSubtitle,
-                               CustomLabel, CustomLabelv2,
-                               CustomEntry, CustomButton)
 from PIL import Image, ImageTk
-from playsound3 import playsound
-import threading
+import pygame as pg
+# https://www.youtube.com/watch?v=xdkY6yhEccA tutorial used
 
 class TitleScreen(tk.Frame):
     def __init__(self, parent):
@@ -25,13 +20,29 @@ class TitleScreen(tk.Frame):
         self.titlelabel.grid(row=1, column=1, sticky="nsew", padx=10, pady=10)
 
         self.newgamebutton = tk.Button(self.titlelabel, text="START GAME",
-                                       command=self.load_RPSMENU,)
-        self.newgamebutton.place(relx=0.5, rely=0.5, anchor="ne")
+                                       command=self.load_RPSMENU, pady=10)
+        self.newgamebutton.place(relx=0.5, rely=0.4, anchor="ne")
+        self.creditsbutton = tk.Button(self.titlelabel, text="credits",
+                                       command=self.load_CREDITSCREEN, pady=10)
+        self.creditsbutton.place(relx=0.5, rely=0.5, anchor="ne")
+
+
+        # start title screen music
+        pg.mixer.init()
+        pg.mixer.music.load("../sfx/tavernmusic.mp3")
+        pg.mixer.music.play(-1) #infinite loop
 
     def load_RPSMENU(self):
+        from RPS_Frames import RPS_Menu
+        pg.mixer.music.stop()
         self.parent.current_frame.destroy()
         self.parent.current_frame = RPS_Menu(self.parent)
         self.parent.current_frame.pack()
 
-    def play_sfx(self, soundfile):
-        threading.Thread(target=lambda: playsound(soundfile), daemon=True).start()
+    def load_CREDITSCREEN(self):
+        from CREDITSCREEN_Frames import CreditScreen
+        pg.mixer.music.stop()
+        self.parent.current_frame.destroy()
+        self.parent.current_frame = CreditScreen(self.parent)
+        self.parent.current_frame.pack()
+

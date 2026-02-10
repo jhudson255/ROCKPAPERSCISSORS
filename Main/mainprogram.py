@@ -1,13 +1,13 @@
 import tkinter as tk
 
 from TITLE_Frames import TitleScreen
-
+from RPS_Frames import RPS_Menu
 class MainApplication(tk.Tk):
     def __init__(self):
         super().__init__()
 
         self.title("Welcome to Rock Paper Scissors")
-        self.geometry("750x750")
+        self.geometry("750x1000")
         self.configure(background = "light grey")
 
         self.current_frame = None
