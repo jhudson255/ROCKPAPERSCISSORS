@@ -30,6 +30,13 @@ class CustomLabel(tk.Label):
                          bg=bg,
                          font=("Arial", "12"))
 
+class CustomLabelv2(tk.Label):
+    def __init__(self, parent, label_text, bg=DEFAULT_BG):
+        super().__init__(parent, text=label_text,
+                         fg="black",
+                         bg="white",
+                         font=("Arial", "12"))
+
 class CustomEntry(tk.Entry):
     def __init__(self, parent, bg=DEFAULT_BG):
         super().__init__(parent, bg=bg,
