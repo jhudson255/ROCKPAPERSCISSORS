@@ -7,7 +7,7 @@ class MainApplication(tk.Tk):
         super().__init__()
 
         self.title("Welcome to Rock Paper Scissors")
-        self.geometry("750x1000")
+        self.geometry("700x700")
         self.configure(background = "light grey")
 
         self.current_frame = None

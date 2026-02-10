@@ -129,7 +129,7 @@ class RPS_Menu(tk.Frame):
         self.playerlabel.grid(row=2, column=1, sticky="nsew", padx=10, pady=10)
 
         self.robotscore = 0
-        self.robotlabel = CustomTitle(self.LEADERBOARDFRAME, f"PLAYER SCORE:{self.robotscore}")
+        self.robotlabel = CustomTitle(self.LEADERBOARDFRAME, f"ROBOT SCORE:{self.robotscore}")
         self.robotlabel.grid(row=3, column=1, sticky="nsew", padx=10, pady=10)
 
         self.gobackbutton = tk.Button(self.LEADERBOARDFRAME,text="GO BACK", command=self.go_to_initial_frame)
@@ -191,7 +191,7 @@ class RPS_Menu(tk.Frame):
         if ITEMS[random] == self.selection:
             self.robotscore += 1
             self.playerscore += 1
-            self.robotlabel.config(text=f"PLAYER SCORE: {self.robotscore}")
+            self.robotlabel.config(text=f"ROBOT SCORE: {self.robotscore}")
             self.playerlabel.config(text=f"PLAYER SCORE: {self.playerscore}")
             self.dialoguebox.config(text="WOW IT'S A TIE")
             self.winnerstatus.config(text="CURRENT WINNER: TIE")
@@ -201,7 +201,7 @@ class RPS_Menu(tk.Frame):
         #ROBOT WINS
         if ITEMS[random] == "PAPER" and self.selection == "ROCK":
             self.robotscore += 1
-            self.robotlabel.config(text=f"PLAYER SCORE: {self.robotscore}")
+            self.robotlabel.config(text=f"ROBOT SCORE: {self.robotscore}")
             self.dialoguebox.config(text="HAHA I AM THE WINNER")
             self.winnerstatus.config(text="CURRENT WINNER: ROBOT")
             self.play_sfx("../sfx/OHNO.mp3")
@@ -209,7 +209,7 @@ class RPS_Menu(tk.Frame):
 
         if ITEMS[random] == "ROCK" and self.selection == "SCISSORS":
             self.robotscore += 1
-            self.robotlabel.config(text=f"PLAYER SCORE: {self.robotscore}")
+            self.robotlabel.config(text=f"ROBOT SCORE: {self.robotscore}")
             self.dialoguebox.config(text="HAHA I AM THE WINNER")
             self.winnerstatus.config(text="CURRENT WINNER: ROBOT")
             self.play_sfx("../sfx/OHNO.mp3")
@@ -217,7 +217,7 @@ class RPS_Menu(tk.Frame):
 
         if ITEMS[random] == "SCISSORS" and self.selection == "PAPER":
             self.robotscore += 1
-            self.robotlabel.config(text=f"PLAYER SCORE: {self.robotscore}")
+            self.robotlabel.config(text=f"ROBOT SCORE: {self.robotscore}")
             self.dialoguebox.config(text="HAHA I AM THE WINNER")
             self.winnerstatus.config(text="CURRENT WINNER: ROBOT")
             self.play_sfx("../sfx/OHNO.mp3")
